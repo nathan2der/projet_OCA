@@ -8,7 +8,7 @@ Ce dépôt fournit :
 - Stats sur les cliques maximales (compte + taille max)
 - Mesure de temps d’exécution
 - Une implémentation **baseline** de Bron–Kerbosch avec pivot (pour pouvoir tester le pipeline).
-  Votre binôme peut remplacer `enumerate_maximal_cliques()` par la version optimisée (ordre de dégénérescence + orientation).
+  Nathan tu peut remplacer `enumerate_maximal_cliques()` par la version optimisée (ordre de dégénérescence + orientation).
 
 ## Structure
 ```
