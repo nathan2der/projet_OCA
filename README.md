@@ -1,62 +1,126 @@
-# projet_OCA
-wadhah taches:
-# Projet — Graphes : stats + cliques maximales
+# Projet OCA : Détection de Communautés dans les Réseaux Sociaux
 
-Ce dépôt fournit :
-- Lecture des graphes **en listes d’adjacence** (CSV edge-list `u,v`)
-- Fonctions de base : degré, degré max, degré moyen, nombre d’arêtes, distribution des degrés
-- Stats sur les cliques maximales (compte + taille max)
-- Mesure de temps d’exécution
-- Une implémentation **baseline** de Bron–Kerbosch avec pivot (pour pouvoir tester le pipeline).
-  Nathan tu peut remplacer `enumerate_maximal_cliques()` par la version optimisée (ordre de dégénérescence + orientation).
+**Auteurs :** Nathan DEROUARD, Wadhah HMISSI 
+**Encadrant :** Georges MANOUSSAKIS
 
-## Structure
+## Description
+
+Ce projet implémente un algorithme d'énumération de cliques maximales dans des graphes, basé sur l'article de Manoussakis (2019) "A new decomposition technique for maximal clique enumeration for sparse graphs". L'algorithme utilise l'ordre de dégénérescence combiné avec l'algorithme de Bron-Kerbosch avec pivot pour obtenir des performances optimales sur des graphes peu denses.
+
+## Structure du Projet
+
 ```
-src/community_cliques/
-  graph_io.py
-  graph_stats.py
-  clique_enum.py
-  clique_stats.py
-  timing.py
-  main.py
-tests/
-data/
+projet_OCA/
+├── src/
+│   └── community_cliques/
+│       ├── __init__.py
+│       ├── graph_io.py          # Lecture des graphes depuis CSV
+│       ├── graph_stats.py        # Calcul des statistiques des graphes
+│       ├── clique_enum.py        # Algorithme baseline (Bron-Kerbosch)
+│       ├── clique_stats.py       # Statistiques sur les cliques
+│       ├── timing.py             # Mesure de temps d'exécution
+│       ├── main.py               # Pipeline principal (baseline)
+│       └── main_projet.py        # Script principal avec algorithme optimisé
+├── tests/
+│   ├── test_graph_io.py         # Tests de lecture de graphes
+│   ├── test_graph_stats.py      # Tests des statistiques
+│   ├── test_clique_enum.py      # Implémentation de l'algorithme optimisé
+│   └── test_clique_stats.py     # Tests des statistiques de cliques
+├── data/                         # Graphes d'entrée (CSV)
+│   ├── graphe0.csv
+│   ├── graphe1.csv
+│   ├── graphe2.csv
+│   ├── graphe3.csv
+│   ├── graphe4.csv
+│   └── graphe5.csv
+├── enonce/                       # Documents du sujet
+│   ├── sujet.pdf
+│   └── papier.pdf
+├── generate_tables.py            # Script pour générer les tableaux du rapport
+├── test_projet.py                # Script de test complet
+└── README.md                     # Ce fichier
 ```
-## Lancer sur un dossier de graphes CSV
-Depuis la racine du projet :
+
+## Prérequis
+
+- **Python 3.8+** (testé avec Python 3.12)
+- **Modules Python standard uniquement** (pas de dépendances externes requises)
+- **Optionnel :** `matplotlib` pour générer les graphiques de distribution des degrés
+  ```bash
+  pip install matplotlib
+  ```
+
+## Installation
+
+Aucune installation n'est nécessaire. Le projet utilise uniquement la bibliothèque standard de Python.
+
+1. Clonez ou téléchargez le projet
+2. Assurez-vous d'être dans le répertoire racine du projet
+
+## Utilisation
+
+### 1. Exécuter l'algorithme principal (recommandé)
+
+Le script `main_projet.py` exécute l'algorithme optimisé sur tous les graphes :
 
 ```bash
-python -m community_cliques.main --data ./data
+# Depuis la racine du projet
+python3 src/community_cliques/main_projet.py
 ```
-## Lancer les tests (unittest)
+
+**Options :**
 ```bash
-python -m unittest discover -s tests -p "test_*.py"
+# Spécifier un autre dossier de données
+python3 src/community_cliques/main_projet.py --data data
 ```
-## Format attendu des graphes
-- Un fichier par graphe
-- Une arête par ligne : `u,v` (séparateur virgule)
-- Lignes vides et commentaires ignorés (`#`, `%`, `//`)
-- Graphe non orienté : on ajoute (u,v) et (v,u)
-- Pas de doublons (voisins stockés dans un `set`)
+
+**Résultat :** 
+- Affiche un tableau avec les résultats pour chaque graphe
+- Génère `resultats_finaux.csv` à la racine du projet
+
+### 2. Exécuter le pipeline baseline
+
+Le script `main.py` utilise l'algorithme baseline (Bron-Kerbosch simple) :
+
+```bash
+# Depuis la racine du projet
+PYTHONPATH=src:$PYTHONPATH python3 -m community_cliques.main --data data
+```
 
 
 
-##Comment lancer main_projet.py
-    Méthode 1 : Depuis la racine du projet (recommandé)
-        cd projet_OCA
-        python3 src/community_cliques/main_projet.py
-    Méthode 2 : Avec un dossier de données personnalisé
-        python3 src/community_cliques/main_projet.py --data data
-    Méthode 3 : En tant que module Python
-        cd /projet_OCAPYTHONPATH=src:$PYTHONPATH python3 -m community_cliques.main_projet
-##Ce que fait le script
-    Charge les 6 graphes (graphe0.csv à graphe5.csv) depuis le dossier data/
-    Exécute votre algorithme d'énumération de cliques maximales
-    Affiche un tableau avec :
-    Dégénérescence
-    Nombre de cliques maximales
-    Taille maximale des cliques
-    Temps d'exécution
-    Sauvegarde les résultats dans resultats_finaux.csv à la racine du projet
+### 3. Exécuter les tests unitaires
 
+```bash
+# Tous les tests
+PYTHONPATH=src:$PYTHONPATH python3 -m unittest discover -s tests -p "test_*.py" -v
+
+# Un test spécifique
+PYTHONPATH=src:$PYTHONPATH python3 -m unittest tests.test_graph_io -v
+```
+
+### 4. Test complet du projet
+
+```bash
+python3 test_projet.py
+```
+
+
+
+## Algorithme Implémenté
+
+L'algorithme principal (`test_clique_enum.py`) implémente :
+
+1. **Calcul de l'ordre de dégénérescence** (O(m))
+   - Utilise un système de buckets pour un tri linéaire
+   - Retourne l'ordre et la dégénérescence k
+
+2. **Algorithme de Bron-Kerbosch avec pivot**
+   - Optimisation pour réduire l'espace de recherche
+   - Utilise une table de hachage (set de frozensets) au lieu d'un arbre de suffixes
+
+3. **Algorithme principal**
+   - Parcourt les sommets selon l'ordre de dégénérescence
+   - Pour chaque sommet, cherche les cliques avec ses voisins "futurs"
+   - Évite les doublons grâce à la table de hachage
 

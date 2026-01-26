@@ -1,6 +1,9 @@
 # Fichier: main_projet.py
+"""
+Script principal pour exécuter l'algorithme d'énumération de cliques maximales
+sur tous les graphes du projet.
+"""
 import time
-import os
 import sys
 from pathlib import Path
 import csv
@@ -67,10 +70,9 @@ def process_graphs(data_dir="data"):
     if resultats:
         output_path = project_root / "resultats_finaux.csv"
         with open(output_path, 'w', newline='', encoding='utf-8') as f:
-            if resultats:
-                writer = csv.DictWriter(f, fieldnames=resultats[0].keys())
-                writer.writeheader()
-                writer.writerows(resultats)
+            writer = csv.DictWriter(f, fieldnames=resultats[0].keys())
+            writer.writeheader()
+            writer.writerows(resultats)
         print(f"\n✓ Les résultats ont été sauvegardés dans '{output_path}'.")
     else:
         print("\n✗ Aucun résultat à sauvegarder.")

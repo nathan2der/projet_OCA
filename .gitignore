@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Fichiers temporaires
+.~lock.*
+*.swp
+*.swo
+*~
+
+# Fichiers macOS
+.DS_Store
+__MACOSX/
+._*
+
+# Fichiers générés (optionnel - décommenter si vous ne voulez pas les versionner)
+# tableau_partie*.csv
+# tableau_partie*.txt
+# distribution_degres.*
+# resultats_finaux.csv
+
+# Environnements virtuels
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Fichiers de test temporaires
+*.tmp
+*.log
